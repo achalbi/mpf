@@ -1,0 +1,24 @@
+// Place all the styles related to the mpf controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.control-label {
+    padding-top: 7px;
+    margin-bottom: 0;
+    text-align: right;
+}
+
+.m-t-30 {
+  margin-top: 30px !important;
+}
+
+#map {
+        height: 450px;
+        width: 100%;
+}
+
+html, body, #map_canvas {
+    height:450px;
+    width:100%;
+}

@@ -1,0 +1,196 @@
+<div class-"row">
+    <h1 class="text-center col-md-12 " >Medcial Provider Finder</h1>
+    <div class="row m-t-30">
+        
+            <label for="continent" class="col-sm-1 control-label">Continent</label>
+            <div class="col-sm-3">
+              <select class="form-control" id="sel1">
+                <option value="0" >Select Continent</option>
+                <option value="Africa">Africa</option>
+                <option value="Asia">Asia</option>
+                <option value="Europe">Europe</option>
+                <option value="Oceania">Oceania</option>
+                <option value="The Americas/The Caribbean">The Americas/The Caribbean</option>
+              </select>
+            </div>
+            <label for="country" class="col-sm-1 control-label">Country</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="sel2">
+                    <option value="0" >Select Country</option>
+                </select>
+            </div>
+            <label for="city" class="col-sm-1 control-label">City</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="sel3">
+                    <option value="0" >Select City</option>
+                </select>
+            </div>
+    </div>
+
+<div id="map" class="m-t-30"></div>
+</div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJOP6X4p5y2be1haWcz8mcfGNfb1wCDvU&callback=initMap"
+    async defer></script>
+
+
+
+
+<script>
+
+    $("#sel1").change(function() {
+      var data = {
+          continent:  $("#sel1").val()
+      };
+      $.getJSON("getCountry.json", data ,function(data){
+              $("#sel2").html("<option value='0'>Select Country</option>");
+              $("#sel3").html("<option value='0'>Select City</option>");
+          $.each(data, function(i, val){
+            $("#sel2").append("<option value='"+val+"'>"+val+"</option>");
+          });
+      });
+    });
+    $("#sel2").change(function() {
+      var data = {
+          country:  $("#sel2").val()
+      };
+      $.getJSON("getCity.json", data ,function(data){
+            $("#sel3").html("<option value='0'>Select City</option>");
+          $.each(data, function(i, val){
+            $("#sel3").append("<option value='"+val+"'>"+val+"</option>");
+          });
+      });
+    });
+    var mps = []
+    $("#sel3").change(function() {
+      var data = {
+          city:  $("#sel3").val()
+      };
+      $.getJSON("getMap.json", data ,function(data){
+            mps = data;
+            initMap();
+      });
+    });
+    </script>
+    <script>
+    
+    
+var bounds;
+var loc = {lat: 26, lng: 26};
+var cnt = 0;
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 2,
+        center: loc
+      });
+      setMarkers(map);
+      
+      map.setCenter(loc);
+      if (cnt > 0){
+          map.setZoom(10);
+      }
+          cnt++;
+      bounds = new google.maps.LatLngBounds();
+    }
+
+function setMarkers(map) {
+  // Adds markers to the map.
+
+  // Marker sizes are expressed as a Size of X,Y where the origin of the image
+  // (0,0) is located in the top left of the image.
+
+  // Origins, anchor positions and coordinates of the marker increase in the X
+  // direction to the right and in the Y direction down.
+  var image = {
+    url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+    // This marker is 20 pixels wide by 32 pixels high.
+    size: new google.maps.Size(20, 32),
+    // The origin for this image is (0, 0).
+    origin: new google.maps.Point(0, 0),
+    // The anchor for this image is the base of the flagpole at (0, 32).
+    anchor: new google.maps.Point(0, 32)
+  };
+  // Shapes define the clickable region of the icon. The type defines an HTML
+  // <area> element 'poly' which traces out a polygon as a series of X,Y points.
+  // The final coordinate closes the poly by connecting to the first coordinate.
+  var shape = {
+    coords: [1, 1, 1, 20, 18, 20, 18, 1],
+    type: 'poly'
+  };
+  for (var i = 0; i < mps.length; i++) {
+    
+    var mp = mps[i];
+    var myLatLng = new google.maps.LatLng(mp.geoX, mp.geoY);
+    loc = myLatLng;
+    bounds.extend(myLatLng);
+    var marker = new google.maps.Marker({
+      position: {lat: mp.geoX, lng: mp.geoY},
+      map: map,
+    //  icon: image,
+      shape: shape,
+      title: mp.name
+    });
+  }
+}
+    
+    
+    
+    
+    
+    /*
+    
+        var features = "";    
+        for (var i = 0; i < mps.length; i++) {
+          features = {  type: 'Feature',  geometry: {type: 'Point', coordinates: [mps.geoX, mps.geoY ]}, properties: {name:  mps.name, address: mps.address} }
+        }
+    
+          var map;
+      
+              var cities = {
+          type: 'FeatureCollection',
+          features: [features]
+        };
+        
+      
+        var bounds;
+      function initMap() {
+        bounds = new google.maps.LatLngBounds();
+        map = new google.maps.Map(document.getElementById('map'));
+      
+        var pointCount = cities.features.length
+        for (var i = 0; i < cities.features.length; i++) {
+            var myLatLng = new google.maps.LatLng(cities.features[i].geometry.coordinates[0], cities.features[i].geometry.coordinates[0]);
+            bounds.extend(myLatLng);
+          map.setCenter(myLatLng);
+          map.setZoom(5);
+        }
+        
+        
+        /*if (pointCount > 1) {
+          map.fitBounds(bounds);
+        }
+        else if (pointCount == 1) {
+          map.setCenter(bounds.getCenter());
+          map.setZoom(14);
+        }*/
+        /*var minLatSpan = 0.001;
+        if (bounds.toSpan().lat() > minLatSpan) {
+            map.fitBounds(bounds); 
+            map.setZoom(3);
+        } else {
+            map.setZoom(16);
+            map.setCenter(bounds.getCenter());
+        }
+          // Add some markers to the map.
+          map.data.setStyle(function(feature) {
+            return {
+              title: feature.getProperty('name'),
+              optimized: false
+            };
+          });
+          map.data.addGeoJson(cities);
+        }
+        
+    */            
+        // GeoJSON, describing the locations and names of some cities.
+
+</script>
