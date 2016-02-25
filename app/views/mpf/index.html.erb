@@ -91,6 +91,7 @@ var cnt = 0;
           cnt++;
       bounds = new google.maps.LatLngBounds();
     }
+var allMarkers = [];
 
 function setMarkers(map) {
   // Adds markers to the map.
@@ -127,9 +128,29 @@ function setMarkers(map) {
       map: map,
     //  icon: image,
       shape: shape,
+      clickable: true,
       title: mp.name
     });
+    allMarkers.push(marker);
+    attachSecretMessage(marker,"<p>" +" Name: " + mp.name +"<br>"+ "Address: " + mp.address +"</p>");
   }
+}
+
+var wins = [];
+// Attaches an info window to a marker with the provided message. When the
+// marker is clicked, the info window will open with the secret message.
+function attachSecretMessage(marker, secretMessage) {
+  var infowindow = new google.maps.InfoWindow({
+    content: secretMessage
+  });
+  wins.push(infowindow);
+
+  marker.addListener('click', function() {
+    for (i=0; i< wins.length; i++){
+        wins[i].close();
+    }
+    infowindow.open(marker.get('map'), marker);
+  });
 }
     
     
