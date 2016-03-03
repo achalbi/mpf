@@ -10,6 +10,11 @@ Rails.application.routes.draw do
    get 'getCity' => 'mpf#getCity'
    get 'getMap' => 'mpf#getMap'
    
+  #match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  match 'getToken', to: 'sessions#create', via: [:get, :post]
+  match 'auth/failure', to: redirect('/'), via: [:get, :post]
+  match 'signout', to: 'sessions#destroy', as: 'signout', via: [:get, :post]
+   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

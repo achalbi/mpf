@@ -38,4 +38,10 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+                          
+  ENV['SALESFORCE_KEY'] = "3MVG9OI03ecbG2Vqmy.uyygt8zIc9mM9XrcKQk8gIkgTZ28ml1lrzMgvslQ0Wxm8gtlx3qMLYbTXDX5BaTE2y";
+  ENV['SALESFORCE_SECRET'] = "766202905834188138";
+  ENV['SALESFORCE_USERNAME'] = "nayana.prabhakar@mindtree.com.prod.dev1";
+  ENV['SALESFORCE_PASSWORD'] = "Mindtree999";
+  ENV['SALESFORCE_SECURITY_TOKEN'] = "pAtTpaYXMKRaGHDCuJzcAn3sO";
 end

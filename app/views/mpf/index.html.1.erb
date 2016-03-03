@@ -42,22 +42,11 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJOP6X4p5y2be1haWcz8mcfGNfb1wCDvU&callback=initMap"
     async defer></script>
 
-<script type="text/javascript">
-var cont; 
-  $('document').ready(function(){
-          $.getJSON("getCountry.json", "" ,function(data){
-              $("#sel2").html("<option value='0'>Select Country</option>");
-              $("#sel3").html("<option value='0'>Select City</option>");
-              cont = data.countries;
-          $.each(cont, function(i, val){
-            $("#sel2").append("<option value='"+val+"'>"+val+"</option>");
-          });
-      });
-  });
-</script>
+
 
 
 <script>
+var cont; 
     $("#sel1").change(function() {
       var data = {
           continent:  $("#sel1").val()
@@ -77,8 +66,7 @@ var cont;
       };
       $.getJSON("getCity.json", data ,function(data){
             $("#sel3").html("<option value='0'>Select City</option>");
-            regions = data.regions
-          $.each(regions, function(i, val){
+          $.each(data, function(i, val){
             $("#sel3").append("<option value='"+val+"'>"+val+"</option>");
           });
       });
@@ -109,7 +97,7 @@ var cnt = 0;
       
       map.setCenter(loc);
       if (cnt > 0){
-          map.setZoom(13);
+          map.setZoom(10);
       }
           cnt++;
       bounds = new google.maps.LatLngBounds();
@@ -140,29 +128,22 @@ function setMarkers(map) {
     coords: [1, 1, 1, 20, 18, 20, 18, 1],
     type: 'poly'
   };
-  //for (var i = 0; i < mps.length; i++) {
-  if(mps.length>0 || mps.length==undefined){
-    for (var i = 0; i < mps.medicalProviderList.medicalProvider.length; i++) {
-      var mp = mps.medicalProviderList.medicalProvider[i];
-     // var myLatLng = new google.maps.LatLng(mp.geoX, mp.geoY);
-      var myLatLng = new google.maps.LatLng(Number(mp.geoData.latitude),Number(mp.geoData.longitude));
-      console.log(myLatLng)
-      loc = myLatLng;
-      bounds.extend(myLatLng);
-      var marker = new google.maps.Marker({
- //       position: {lat: mp.geoX, lng: mp.geoY},
-        position: {lat: Number(mp.geoData.latitude), lng: Number(mp.geoData.longitude)},
-        map: map,
-      //  icon: image,
-        shape: shape,
-        clickable: true,
-     //   title: mp.name
-        title: mp.providerName
-      });
-      allMarkers.push(marker);
-   //   attachSecretMessage(marker,"<p>" +" Name: " + mp.name +"<br>"+ "Address: " + mp.address +"</p>");
-      attachSecretMessage(marker,"<p>" +" Name: " + mp.providerName +"<br>"+ "Address: " + mp.address1 +"</p>");
-    }
+  for (var i = 0; i < mps.length; i++) {
+    
+    var mp = mps[i];
+    var myLatLng = new google.maps.LatLng(mp.geoX, mp.geoY);
+    loc = myLatLng;
+    bounds.extend(myLatLng);
+    var marker = new google.maps.Marker({
+      position: {lat: mp.geoX, lng: mp.geoY},
+      map: map,
+    //  icon: image,
+      shape: shape,
+      clickable: true,
+      title: mp.name
+    });
+    allMarkers.push(marker);
+    attachSecretMessage(marker,"<p>" +" Name: " + mp.name +"<br>"+ "Address: " + mp.address +"</p>");
   }
 }
 

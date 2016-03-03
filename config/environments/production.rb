@@ -76,4 +76,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  
+  ENV['SALESFORCE_KEY'] = "3MVG9OI03ecbG2Vqmy.uyygt8zIc9mM9XrcKQk8gIkgTZ28ml1lrzMgvslQ0Wxm8gtlx3qMLYbTXDX5BaTE2y";
+  ENV['SALESFORCE_SECRET'] = "766202905834188138";
+  ENV['SALESFORCE_USERNAME'] = "nayana.prabhakar@mindtree.com";
+  ENV['SALESFORCE_PASSWORD'] = "Mindtree999";
 end
