@@ -9,6 +9,7 @@ Rails.application.routes.draw do
    get 'getCountry' => 'mpf#getCountry'
    get 'getCity' => 'mpf#getCity'
    get 'getMap' => 'mpf#getMap'
+   get 'getMapMyLoc' => 'mpf#getMapMyLoc'
    
   #match 'auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match 'getToken', to: 'sessions#create', via: [:get, :post]

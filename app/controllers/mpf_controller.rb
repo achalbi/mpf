@@ -42,7 +42,15 @@ class MpfController < ApplicationController
     param = params['city']
    # @mps = Mp.where(city: param  ) #.pluck(:geoX, :geoY)
     @mps = RestClient.get session[:instance_URL]+"/services/apexrest/medicalproviderdetails?country="+session[:country]+"&city="+param,{ Authorization: "Bearer "+session[:access_token],:accept => :json }
-    puts @mps.to_json
+   # puts @mps.to_json
     render json: @mps
+  end
+  
+  def getMapMyLoc
+      lat = params['lat']
+      lng = params['lng']
+      @mps = RestClient.get session[:instance_URL]+"/services/apexrest/medicalproviderdetails?lat="+lat+"&lng="+lng+"&distance=50",{ Authorization: "Bearer "+session[:access_token],:accept => :json }
+      render json: @mps
+      
   end
 end

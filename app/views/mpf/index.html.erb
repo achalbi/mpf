@@ -29,6 +29,11 @@
                 </select>
             </div>
     </div>
+    <div class="row m-t-20">
+      <div class="col-md-3 col-md-offset-2">
+        <button class="btn btn-primary" onclick="getLocation()">Medical providers around me</button>
+      </div>
+      </div>
     <div class="row m-t-30">
       <div class="col-md-2"></div>
       <div class="col-md-7 col-sm-12">
@@ -38,6 +43,8 @@
     </div>
 
 </div>
+
+<p id="demo"></p>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJOP6X4p5y2be1haWcz8mcfGNfb1wCDvU&callback=initMap"
     async defer></script>
@@ -244,4 +251,27 @@ function attachSecretMessage(marker, secretMessage) {
     */            
         // GeoJSON, describing the locations and names of some cities.
 
+</script>
+
+
+<script>
+var x = document.getElementById("myLocation");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+  loc = {lat: position.coords.latitude, lng: position.coords.longitude};
+  $.getJSON("getMapMyLoc.json", loc ,function(data){
+            mps = data;
+            initMap();
+      });
+  //  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  //  "<br>Longitude: " + position.coords.longitude;	
+}
 </script>
